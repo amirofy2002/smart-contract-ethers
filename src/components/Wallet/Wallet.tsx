@@ -1,6 +1,9 @@
 import "./Wallet.scss";
 import { ethers } from "ethers";
 import { useState } from "react";
+import store from "../../redux/stores";
+import { create, currentWallet } from "../../redux/reducers/basic";
+import { useSelector } from "react-redux";
 function Wallet() {
   const onCreateWallet = () => {
     let wallet = ethers.Wallet.createRandom();
@@ -11,23 +14,31 @@ function Wallet() {
     setWalletAddress(address);
     setPrivateKey(privateKey);
     setPheases(wallet.mnemonic.phrase);
+    store.dispatch(
+      create({
+        address,
+        mnemonic: wallet.mnemonic.phrase,
+        privateKey,
+      })
+    );
   };
   const [walletAddr, setWalletAddress] = useState<string>();
   const [privateKey, setPrivateKey] = useState<string>();
   const [phrases, setPheases] = useState<string>();
+  const wallet = useSelector(currentWallet);
   return (
     <div className="wallet-container">
       {walletAddr && (
         <>
           <p className="addr">
             {" "}
-            Addr: <span>{walletAddr} </span>
+            Addr: <span>{wallet?.address} </span>
           </p>
-          <p className="phrases"> {phrases} </p>
+          <p className="phrases"> {wallet?.mnemonic} </p>
         </>
       )}
       <hr />
-      <button onClick={onCreateWallet}> Create A Wallet </button>
+      {!wallet && <button onClick={onCreateWallet}> Create A Wallet </button>}
     </div>
   );
 }
