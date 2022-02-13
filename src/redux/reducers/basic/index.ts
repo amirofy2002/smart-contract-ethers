@@ -16,6 +16,13 @@ export const fetchTodos = createAsyncThunk<
 
 })
 
+export interface IProvider {
+    chainId: number;
+    url: string;
+    expolorer: string;
+    selected: boolean;
+
+}
 export interface IWallet {
     address: string;
     mnemonic: string;
@@ -25,11 +32,16 @@ export interface IWallet {
 export interface IWalletState {
     value: number,
     wallets: IWallet | undefined
+    providers: IProvider[]
 }
 
 const inital: IWalletState = {
     value: 0,
-    wallets: undefined
+    wallets: undefined,
+    providers: [
+        { url: "https://rpc.fuse.io", chainId: 122, expolorer: "https://explorer.fuse.io/", selected: false },
+        { url: "http://127.0.0.1:8545", chainId: 122, expolorer: "https://explorer.fuse.io/", selected: true }
+    ]
 }
 
 
@@ -39,6 +51,15 @@ export const walletSlices = createSlice({
     reducers: {
         create: (state, action: PayloadAction<IWallet>) => {
             state.wallets = action.payload
+        },
+        selectProvider: (state, action: PayloadAction<IProvider>) => {
+            let provider = state.providers.find(f => f.chainId == action.payload.chainId);
+
+            if (!provider) {
+                provider!.selected = true;
+                state.providers = [...state.providers.filter(f => !f.selected), provider!]
+            }
+
         }
     },
     extraReducers: builder => {
@@ -57,5 +78,6 @@ export const {
 
 export const selectCount = (state: RootState) => state.wallet.value
 export const currentWallet = (state: RootState) => state.wallet.wallets
+export const providers = (state: RootState) => state.wallet.providers
 
 export default walletSlices.reducer;
