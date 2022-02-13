@@ -2,7 +2,7 @@ import { Web3Provider } from "@ethersproject/providers";
 import { ethers } from "ethers";
 import { useState } from "react";
 import abi from "./abi.json";
-
+//0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0
 function SimpleStore() {
   const [error, SetError] = useState("");
   const connectWalletHandler = () => {
