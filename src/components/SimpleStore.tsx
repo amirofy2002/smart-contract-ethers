@@ -45,7 +45,7 @@ function SimpleStore() {
     <div className="container">
       <h1>Simple Store</h1>
       <button onClick={connectWalletHandler}> Connect </button>
-      <h4> Account:{account} </h4>
+      <p> Account:{account} </p>
       <button onClick={setHandler}> set </button>
       <button onClick={getHandler}> get </button>
       <h3> {error} </h3>
