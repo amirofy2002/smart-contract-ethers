@@ -40,7 +40,7 @@ const inital: IWalletState = {
     wallets: undefined,
     providers: [
         { url: "https://rpc.fuse.io", chainId: 122, expolorer: "https://explorer.fuse.io/", selected: false },
-        { url: "http://127.0.0.1:8545", chainId: 122, expolorer: "https://explorer.fuse.io/", selected: true }
+        { url: "http://127.0.0.1:8545", chainId: 121, expolorer: "https://explorer.fuse.io/", selected: true }
     ]
 }
 
@@ -55,9 +55,9 @@ export const walletSlices = createSlice({
         selectProvider: (state, action: PayloadAction<IProvider>) => {
             let provider = state.providers.find(f => f.chainId == action.payload.chainId);
 
-            if (!provider) {
+            if (provider) {
                 provider!.selected = true;
-                state.providers = [...state.providers.filter(f => !f.selected), provider!]
+                state.providers = [...state.providers.filter(f => f.chainId != provider?.chainId).map(f => ({ ...f, selected: false })), provider!]
             }
 
         }
@@ -73,11 +73,13 @@ export const walletSlices = createSlice({
 
 
 export const {
-    create
+    create,
+    selectProvider
 } = walletSlices.actions;
 
 export const selectCount = (state: RootState) => state.wallet.value
 export const currentWallet = (state: RootState) => state.wallet.wallets
 export const providers = (state: RootState) => state.wallet.providers
+export const selectedProvider = (state: RootState) => state.wallet.providers.find(f => f.selected)
 
 export default walletSlices.reducer;
