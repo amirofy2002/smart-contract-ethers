@@ -2,11 +2,15 @@ import "./Wallet.scss";
 import { BigNumber, ethers } from "ethers";
 import { useState } from "react";
 import store from "../../redux/stores";
-import { create, currentWallet } from "../../redux/reducers/basic";
+import {
+  create,
+  currentWallet,
+  selectedProvider,
+} from "../../redux/reducers/basic";
 import { useDispatch, useSelector } from "react-redux";
 function Wallet() {
   const dispatch = useDispatch();
-
+  const selectedProviders = useSelector(selectedProvider);
   const onCreateWallet = () => {
     let wallet = ethers.Wallet.createRandom();
     let privateKey = wallet.privateKey;
@@ -35,7 +39,7 @@ function Wallet() {
     // let provider = new ethers.providers.JsonRpcProvider(
     //   "http://localhost:8545"
     // );
-    let provider = ethers.getDefaultProvider("ropsten");
+    let provider = new ethers.providers.JsonRpcProvider(selectedProviders?.url);
 
     const network = await provider.getNetwork();
     const chainId = network.chainId;

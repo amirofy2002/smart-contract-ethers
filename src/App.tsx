@@ -5,6 +5,7 @@ import SimpleStore from "./components/SimpleStore";
 import Wallet from "./components/Wallet/Wallet";
 import { Route, Routes } from "react-router-dom";
 import Providers from "./components/Providers/Providers";
+import HomePage from "./components/Home/HomePage";
 function App() {
   return (
     <div className="App">
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route path="wallet" element={<Wallet />}></Route>
           <Route path="providers" element={<Providers />}></Route>
+          <Route path="" element={<HomePage />}></Route>
         </Routes>
       </header>
     </div>
